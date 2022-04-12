@@ -5,7 +5,7 @@
 
 # defines a custom vectorizer class.
 from pythainlp.corpus import thai_stopwords
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, TfidfVectorizer
 from sklearn.pipeline import Pipeline
 
 # include file for custom tf-idf
