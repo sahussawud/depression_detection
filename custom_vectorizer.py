@@ -246,3 +246,113 @@ class CustomTfidForTokenizedfVectorizer(CustomTfidfVectorizer):
               # to remove stop words and extract n-grams
               return(self._word_ngrams(result, self.stopwords))
           return(analyser)
+
+class CustomTokenizedVectorizerForOriginalTfidf(TfidfVectorizer): 
+    def __init__(
+        self,
+        *,
+        input="content",
+        encoding="utf-8",
+        decode_error="strict",
+        strip_accents=None,
+        lowercase=True,
+        preprocessor=None,
+        tokenizer=None,
+        analyzer="word",
+        stop_words=None,
+        token_pattern=r"(?u)\b\w\w+\b",
+        ngram_range=(1, 1),
+        max_df=1.0,
+        min_df=1,
+        max_features=None,
+        vocabulary=None,
+        binary=False,
+        dtype=np.float64,
+        norm="l2",
+        use_idf=True,
+        smooth_idf=True,
+        sublinear_tf=False,
+    ):
+
+        super().__init__(
+            input=input,
+            encoding=encoding,
+            decode_error=decode_error,
+            strip_accents=strip_accents,
+            lowercase=lowercase,
+            preprocessor=preprocessor,
+            tokenizer=tokenizer,
+            analyzer=analyzer,
+            stop_words=stop_words,
+            token_pattern=token_pattern,
+            ngram_range=ngram_range,
+            max_df=max_df,
+            min_df=min_df,
+            max_features=max_features,
+            vocabulary=vocabulary,
+            binary=binary,
+            dtype=dtype,
+        )
+
+        self._tfidf = TfidfTransformer(
+            norm=norm, use_idf=use_idf, smooth_idf=smooth_idf, sublinear_tf=sublinear_tf
+        )
+    # overwrite the build_analyzer method, and word_ngrams count
+    stopwords = list(thai_stopwords())
+    def _word_ngrams(self, tokens, stop_words=None):
+            """Turn tokens into a sequence of n-grams after stop words filtering"""
+            # handle stop words
+            if stop_words is not None:
+                tokens = [w for w in tokens if w not in stop_words]
+            # handle token n-grams
+            min_n, max_n = self.ngram_range
+            if max_n != 1:
+                original_tokens = tokens
+                if min_n == 1:
+                    # no need to do any slicing for unigrams
+                    # just iterate through the original tokens
+                    tokens = list(original_tokens)
+                    min_n += 1
+                else:
+                    tokens = []
+
+                n_original_tokens = len(original_tokens)
+
+                # bind method outside of loop to reduce overhead
+                tokens_append = tokens.append
+                space_join = " ".join
+
+            #     for n in range(min_n, min(max_n + 1, n_original_tokens + 1)):
+            #         for i in range(n_original_tokens - n + 1):
+            #             if '-' not in space_join(original_tokens[i : i + n]):
+            #                 tokens_append(space_join(original_tokens[i : i + n]))
+            # tokens = list(filter(lambda a: a != '-', tokens))
+                for n in range(min_n, min(max_n + 1, n_original_tokens + 1)):
+                        for i in range(n_original_tokens - n + 1):
+                            # print(original_tokens[i : i + n])
+                            tokens_append(space_join(original_tokens[i : i + n]))
+                tokens = [w for w in tokens if '-' not in w]
+            return tokens
+
+    # create a custom analyzer for the vectorizer
+    def build_analyzer(self):
+
+        # load stop words using CountVectorizer's built in method
+        # stop_words = self.get_stop_words()
+        
+        # create the analyzer that will be returned by this method
+        def analyser(doc):
+              
+              # apply the preprocessing and tokenzation steps
+              preprocressing_n_tokenizer = doc.split('-')
+              preprocressing_n_tokenizer = [i.split(',') for i in preprocressing_n_tokenizer]
+              result = functools.reduce(lambda a,b:a+['-']+b,preprocressing_n_tokenizer)
+
+              # remove token that try to count cross message by containing '-' in their token
+              # print('preprocressing_n_tokenizer ', preprocressing_n_tokenizer)
+              # remove_separate_token = [word  for word in preprocressing_n_tokenizer if '-' not in word]
+              # print('preprocressing_n_tokenizer ', preprocressing_n_tokenizer)
+              # use CountVectorizer's _word_ngrams built in method
+              # to remove stop words and extract n-grams
+              return(self._word_ngrams(result, self.stopwords))
+        return(analyser)
