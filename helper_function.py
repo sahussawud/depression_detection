@@ -1,10 +1,11 @@
 from pythainlp.corpus.common import thai_stopwords
 import string
-import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import os
 import numpy as np
+import matplotlib as mpl
+
 
 def top_tfidf_feats(row, features, top_n=25):
     ''' Get top n tfidf values in row and return them with their corresponding feature names.'''
@@ -78,10 +79,9 @@ def change_matplotlib_font(font_download_url):
         fm.fontManager.addfont(font_file)
 
     font_name = fm.FontProperties(fname=font_files[0]).get_name()
-    matplotlib.rc('font', family=font_name)
+    mpl.rc('font', family=font_name)
     print("font family: ", plt.rcParams['font.family'])
     # import new mathplotlib that attach thai front
-    import matplotlib
 
 def dummy_fun(doc):
     return doc
