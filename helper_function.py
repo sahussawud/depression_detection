@@ -105,4 +105,4 @@ def customize_text_tokenizer(reviewText, engine='attacut', split=False):
     return word_tokenized
 
 font_download_url = "https://fonts.google.com/download?family=Sarabun"
-change_matplotlib_font(font_download_url)
+# change_matplotlib_font(font_download_url)
