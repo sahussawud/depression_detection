@@ -13,7 +13,7 @@ import scipy.sparse as sp
 from sklearn.utils.validation import check_is_fitted, check_array, FLOAT_DTYPES, check_scalar
 from sklearn.utils import _IS_32BIT
 from sklearn.utils.fixes import _astype_copy_false
-
+import numpy as np
 #import for reduce()
 import functools
 
