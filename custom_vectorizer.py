@@ -61,18 +61,20 @@ class CustomVectorizer(CountVectorizer):
         
         # create the analyzer that will be returned by this method
         def analyser(doc):
-            
-            # apply the preprocessing and tokenzation steps
-            preprocressing_n_tokenizer = customize_text_tokenizer(doc)
-            # remove token that try to count cross message by containing '-' in their token
-            # print('preprocressing_n_tokenizer ', preprocressing_n_tokenizer)
-            remove_separate_token = [word  for word in preprocressing_n_tokenizer if '-' not in word]
-            # print('remove_separate_token ', remove_separate_token)
-            # use CountVectorizer's _word_ngrams built in method
-            # to remove stop words and extract n-grams
-            return(self._word_ngrams(remove_separate_token, self.stopwords))
-        return(analyser)
+              
+              # apply the preprocessing and tokenzation steps
+              preprocressing_n_tokenizer = doc.split('-')
+              preprocressing_n_tokenizer = [i.split(',') for i in preprocressing_n_tokenizer]
+              result = functools.reduce(lambda a,b:a+['-']+b,preprocressing_n_tokenizer)
 
+              # remove token that try to count cross message by containing '-' in their token
+              # print('preprocressing_n_tokenizer ', preprocressing_n_tokenizer)
+              # remove_separate_token = [word  for word in preprocressing_n_tokenizer if '-' not in word]
+              # print('preprocressing_n_tokenizer ', preprocressing_n_tokenizer)
+              # use CountVectorizer's _word_ngrams built in method
+              # to remove stop words and extract n-grams
+              return(self._word_ngrams(result, self.stopwords))
+        return(analyser)
 
 def _document_frequency(X):
     """Count the number of non-zero values for each feature in sparse X."""
