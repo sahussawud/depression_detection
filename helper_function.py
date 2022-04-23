@@ -5,7 +5,7 @@ import matplotlib.font_manager as fm
 import os
 import numpy as np
 import matplotlib as mpl
-
+import pandas as pd
 
 def top_tfidf_feats(row, features, top_n=25):
     ''' Get top n tfidf values in row and return them with their corresponding feature names.'''
