@@ -1,4 +1,5 @@
 from pythainlp.corpus.common import thai_stopwords
+from pythainlp.tokenize import word_tokenize
 import string
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
@@ -6,6 +7,7 @@ import os
 import numpy as np
 import matplotlib as mpl
 import pandas as pd
+import re
 
 def top_tfidf_feats(row, features, top_n=25):
     ''' Get top n tfidf values in row and return them with their corresponding feature names.'''
