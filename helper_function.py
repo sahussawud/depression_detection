@@ -88,13 +88,15 @@ def change_matplotlib_font(font_download_url):
 def dummy_fun(doc):
     return doc
 
+emoji_regx = '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'
+
 def customize_text_tokenizer(reviewText, engine='attacut', split=False):
 
     without_url = re.sub(r"http\S+", "", reviewText)
     # replace 55 with 'ฮ่า' before clean word
     reviewText = re.sub(r"(555)", ' ฮ่า', without_url)
     # Thai & English Charecter preserve 
-    pattern = re.compile(r"[^\u0E00-\u0E7Fa-zA-Z']|^'|'$|''|[//t//n]|^#")
+    pattern = re.compile(r"[^\u0E00-\u0E7Fa-zA-Z']|^'|'$|''|[//t//n]|^#|"+emoji_regx)
     char_to_remove = re.findall(pattern, reviewText)
     # preserve sepperate token -
     char_to_remove = [i for i in char_to_remove if i != '-']
