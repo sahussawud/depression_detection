@@ -8,6 +8,11 @@ import numpy as np
 import matplotlib as mpl
 import pandas as pd
 import re
+from pythainlp.tokenize import Tokenizer
+from pythainlp.ulmfit import process_thai
+
+emoji_regx = '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'
+
 
 def top_tfidf_feats(row, features, top_n=25):
     ''' Get top n tfidf values in row and return them with their corresponding feature names.'''
@@ -88,10 +93,8 @@ def change_matplotlib_font(font_download_url):
 def dummy_fun(doc):
     return doc
 
-emoji_regx = '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'
-
 def customize_text_tokenizer(reviewText, engine='attacut', split=False):
-
+    _tokenizer = Tokenizer(engine='attacut')
     without_url = re.sub(r"http\S+", "", reviewText)
     # replace 55 with 'ฮ่า' before clean word
     reviewText = re.sub(r"(555)", ' ฮ่า', without_url)
@@ -102,9 +105,12 @@ def customize_text_tokenizer(reviewText, engine='attacut', split=False):
     char_to_remove = [i for i in char_to_remove if i != '-']
     # remove ignore charecters
     list_with_char_removed = [char for char in reviewText if not char in char_to_remove]
-    nopunc_text = ''.join(list_with_char_removed).strip()
+    result = ''.join(list_with_char_removed).strip()
     # tokenize word with attacut
-    word_tokenized = word_tokenize(nopunc_text, engine=engine, keep_whitespace=True) 
+    if engine == 'thai_process':
+      result = process_thai(result, tok_func=_tokenizer.word_tokenize)
+    else:
+      result = word_tokenize(result, engine=engine, keep_whitespace=True)
 
     return word_tokenized
 
