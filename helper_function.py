@@ -112,7 +112,7 @@ def customize_text_tokenizer(reviewText, engine='attacut', split=False):
     else:
       result = word_tokenize(result, engine=engine, keep_whitespace=True)
 
-    return word_tokenized
+    return result
 
 font_download_url = "https://fonts.google.com/download?family=Sarabun"
 # change_matplotlib_font(font_download_url)
