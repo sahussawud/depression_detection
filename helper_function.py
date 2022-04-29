@@ -144,5 +144,6 @@ def extract_handcraft_feature(merge_chat_df):
     merge_chat_df['uwc'] = uwc
     merge_chat_df['processed_chat_len'] = processed_chat_len
     merge_chat_df['timestamp_chat_avg'] = merge_chat_df.timestamp_chat.apply(lambda x: np.mean([ 0 if i > (30 * 60) else i for i in x]))
+    merge_chat_df['hour_in_datetime'] = merge_chat_df['hour_in_datetime'].apply(lambda x: np.mean(x))
     merge_chat_df = pd.concat([merge_chat_df, postag_df], axis=1)
     return merge_chat_df
