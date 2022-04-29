@@ -119,30 +119,30 @@ font_download_url = "https://fonts.google.com/download?family=Sarabun"
 
 # hand-craft features
 def generate_handcraft_features(merge_chat_df):
-  '''
-  return
-    wc - words count
-    uwc - unique words count
-    processed_chat_len - charecters lenght after preprocessing
-    postag - pos tagging a word in messages in dict()
-  '''
-  wc = merge_chat_df.message.map(lambda row: len([j for i in row for j in i ]))
-  uwc = merge_chat_df.message.map(lambda row: len(set([j for i in row for j in i ])))
-  processed_chat_len = merge_chat_df.message.map(lambda row: len(''.join([j for i in row for j in i ])))
-  postag = merge_chat_df.message.apply(lambda x: [pos_tag(i, corpus='orchid') for i in x]).apply(lambda postag: dict(Counter([j[1] for i in postag for j in i])))
-  return wc, uwc, processed_chat_len, postag
+    '''
+    return
+        wc - words count
+        uwc - unique words count
+        processed_chat_len - charecters lenght after preprocessing
+        postag - pos tagging a word in messages in dict()
+    '''
+    wc = merge_chat_df.message.map(lambda row: len([j for i in row for j in i ]))
+    uwc = merge_chat_df.message.map(lambda row: len(set([j for i in row for j in i ])))
+    processed_chat_len = merge_chat_df.message.map(lambda row: len(''.join([j for i in row for j in i ])))
+    postag = merge_chat_df.message.apply(lambda x: [pos_tag(i, corpus='orchid') for i in x]).apply(lambda postag: dict(Counter([j[1] for i in postag for j in i])))
+    return wc, uwc, processed_chat_len, postag
 
 def extract_handcraft_feature(merge_chat_df):
-  '''
-    postag_df : extract pos tagging colum and fill nan value = 0
-    timestamp_chat_avg : extract a rapid message sent to bot, to robust feature we max a value at 1800 second(30min)
-                         if more than 30 min we will just in another session of conversation
-  '''
-  wc, uwc, processed_chat_len, postag = generate_handcraft_features(merge_chat_df)
-  postag_df = pd.json_normalize(postag).fillna(0)
-  merge_chat_df['wc'] = wc
-  merge_chat_df['uwc'] = uwc
-  merge_chat_df['processed_chat_len'] = processed_chat_len
-  merge_chat_df['timestamp_chat_avg'] = merge_chat_df.timestamp_chat.apply(lambda x: np.mean([ 0 if i > (30 * 60) else i for i in x]))
-  merge_chat_df = pd.concat([merge_chat_df, postag_df], axis=1)
-  return merge_chat_df
+    '''
+        postag_df : extract pos tagging colum and fill nan value = 0
+        timestamp_chat_avg : extract a rapid message sent to bot, to robust feature we max a value at 1800 second(30min)
+                            if more than 30 min we will just in another session of conversation
+    '''
+    wc, uwc, processed_chat_len, postag = generate_handcraft_features(merge_chat_df)
+    postag_df = pd.json_normalize(postag).fillna(0)
+    merge_chat_df['wc'] = wc
+    merge_chat_df['uwc'] = uwc
+    merge_chat_df['processed_chat_len'] = processed_chat_len
+    merge_chat_df['timestamp_chat_avg'] = merge_chat_df.timestamp_chat.apply(lambda x: np.mean([ 0 if i > (30 * 60) else i for i in x]))
+    merge_chat_df = pd.concat([merge_chat_df, postag_df], axis=1)
+    return merge_chat_df
