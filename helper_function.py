@@ -10,6 +10,8 @@ import pandas as pd
 import re
 from pythainlp.tokenize import Tokenizer
 from pythainlp.ulmfit import process_thai
+from pythainlp.tag import pos_tag
+from collections import Counter
 
 emoji_regx = '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'
 
