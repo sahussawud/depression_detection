@@ -12,9 +12,8 @@ from pythainlp.tokenize import Tokenizer
 from pythainlp.ulmfit import process_thai
 from pythainlp.tag import pos_tag
 from collections import Counter
-
-emoji_regx = '(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])'
-
+import emoji
+emoji_regx = ''.join(emoji.UNICODE_EMOJI['en'].keys())
 
 def top_tfidf_feats(row, features, top_n=25):
     ''' Get top n tfidf values in row and return them with their corresponding feature names.'''
@@ -95,14 +94,19 @@ def change_matplotlib_font(font_download_url):
 def dummy_fun(doc):
     return doc
 
+
+import re
+from pythainlp.tokenize import Tokenizer
+from pythainlp.ulmfit import process_thai
+from pythainlp.tag import pos_tag
+from pythainlp.tokenize import word_tokenize
+
 def customize_text_tokenizer(reviewText, engine='attacut', split=False):
     _tokenizer = Tokenizer(engine='attacut')
     without_url = re.sub(r"http\S+", "", reviewText)
-    # replace 55 with 'ฮ่า' before clean word
-    reviewText = re.sub(r"(555)", ' ฮ่า', without_url)
     # Thai & English Charecter preserve 
-    pattern = re.compile(r"[^\u0E00-\u0E7Fa-zA-Z']|^'|'$|''|[//t//n]|^#|"+emoji_regx)
-    char_to_remove = re.findall(pattern, reviewText)
+    pattern = re.compile(r"[^\u0E00-\u0E7Fa-zA-Z5']|^'|'$|''|[//t//n//s]|^#|"+emoji_regx)
+    char_to_remove = re.findall(pattern, without_url)
     # preserve sepperate token -
     char_to_remove = [i for i in char_to_remove if i != '-']
     # remove ignore charecters
