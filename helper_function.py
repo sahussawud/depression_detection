@@ -13,7 +13,7 @@ from pythainlp.ulmfit import process_thai
 from pythainlp.tag import pos_tag
 from collections import Counter
 import emoji
-emoji_regx = ''.join(emoji.UNICODE_EMOJI['en'].keys())
+emoji_regx = emoji.UNICODE_EMOJI['en'].keys()
 
 def top_tfidf_feats(row, features, top_n=25):
     ''' Get top n tfidf values in row and return them with their corresponding feature names.'''
@@ -105,10 +105,10 @@ def customize_text_tokenizer(reviewText, engine='attacut', split=False):
     _tokenizer = Tokenizer(engine='attacut')
     without_url = re.sub(r"http\S+", "", reviewText)
     # Thai & English Charecter preserve 
-    pattern = re.compile(r"[^\u0E00-\u0E7Fa-zA-Z5']|^'|'$|''|[//t//n//s]|^#|"+emoji_regx)
+    pattern = re.compile(r"[^\u0E00-\u0E7Fa-zA-Z5']|^'|'$|''|[//t//n//s]|^#")
     char_to_remove = re.findall(pattern, without_url)
     # preserve sepperate token -
-    char_to_remove = [i for i in char_to_remove if i != '-']
+    char_to_remove = [i for i in char_to_remove if i not in emoji_regx]
     # remove ignore charecters
     list_with_char_removed = [char for char in reviewText if not char in char_to_remove]
     result = ''.join(list_with_char_removed).strip()
@@ -116,7 +116,7 @@ def customize_text_tokenizer(reviewText, engine='attacut', split=False):
     if engine == 'thai_process':
       result = process_thai(result, tok_func=_tokenizer.word_tokenize)
     else:
-      result = word_tokenize(result, engine=engine, keep_whitespace=True)
+      result = word_tokenize(result, engine=engine, keep_whitespace=False)
 
     return result
 
