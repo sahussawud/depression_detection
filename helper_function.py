@@ -87,7 +87,7 @@ def change_matplotlib_font(font_download_url):
         fm.fontManager.addfont(font_file)
 
     font_name = fm.FontProperties(fname=font_files[0]).get_name()
-    mpl.rc('font', family=font_name, size='16', weight='bold')
+    mpl.rc('font', family=font_name, size='16')
     print("font family: ", plt.rcParams['font.family'])
     # import new mathplotlib that attach thai front
 
