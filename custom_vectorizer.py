@@ -57,7 +57,6 @@ class CustomVectorizer(CountVectorizer):
     def build_analyzer(self):
 
         # load stop words using CountVectorizer's built in method
-        # stop_words = self.get_stop_words()
         
         # create the analyzer that will be returned by this method
         def analyser(doc):
@@ -66,13 +65,6 @@ class CustomVectorizer(CountVectorizer):
               preprocressing_n_tokenizer = doc.split('-')
               preprocressing_n_tokenizer = [i.split(',') for i in preprocressing_n_tokenizer]
               result = functools.reduce(lambda a,b:a+['-']+b,preprocressing_n_tokenizer)
-
-              # remove token that try to count cross message by containing '-' in their token
-              # print('preprocressing_n_tokenizer ', preprocressing_n_tokenizer)
-              # remove_separate_token = [word  for word in preprocressing_n_tokenizer if '-' not in word]
-              # print('preprocressing_n_tokenizer ', preprocressing_n_tokenizer)
-              # use CountVectorizer's _word_ngrams built in method
-              # to remove stop words and extract n-grams
               return(self._word_ngrams(result, self.stopwords))
         return(analyser)
 

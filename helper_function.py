@@ -13,7 +13,7 @@ from pythainlp.ulmfit import process_thai
 from pythainlp.tag import pos_tag
 from collections import Counter
 import emoji
-emoji_regx = emoji.UNICODE_EMOJI['en'].keys()
+emoji_regx = emoji.EMOJI_DATA.keys()
 
 def top_tfidf_feats(row, features, top_n=25):
     ''' Get top n tfidf values in row and return them with their corresponding feature names.'''
@@ -149,7 +149,8 @@ def extract_handcraft_feature(merge_chat_df):
     merge_chat_df['wc'] = wc
     merge_chat_df['uwc'] = uwc
     merge_chat_df['processed_chat_len'] = processed_chat_len
-    merge_chat_df['timestamp_chat_avg'] = merge_chat_df.timestamp_chat.apply(lambda x: np.mean([ 0 if i > (30 * 60) else i for i in x]))
+    merge_chat_df['timestamp_chat_avg'] = merge_chat_df.timestamp_chat.apply(
+                                                        lambda x: np.mean([ 0 if i > (30 * 60) else i for i in x]))
     merge_chat_df['hour_in_datetime'] = merge_chat_df['hour_in_datetime'].apply(lambda x: np.mean(x))
     merge_chat_df = pd.concat([merge_chat_df, postag_df], axis=1)
     return merge_chat_df
