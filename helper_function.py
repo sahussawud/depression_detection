@@ -107,7 +107,6 @@ def customize_text_tokenizer(reviewText, engine='attacut', split=False):
     # Thai & English Charecter preserve 
     pattern = re.compile(r"[^\u0E00-\u0E7Fa-zA-Z5']|^'|'$|''|[//t//n//s]|^#")
     char_to_remove = re.findall(pattern, without_url)
-    # preserve sepperate token -
     char_to_remove = [i for i in char_to_remove if i not in emoji_regx]
     # remove ignore charecters
     list_with_char_removed = [char for char in reviewText if not char in char_to_remove]
