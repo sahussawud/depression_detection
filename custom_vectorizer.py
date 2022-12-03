@@ -65,7 +65,7 @@ class CustomVectorizer(CountVectorizer):
             preprocressing_n_tokenizer = doc.split('-')
             preprocressing_n_tokenizer = [i.split(',') for i in preprocressing_n_tokenizer]
             result = functools.reduce(lambda a,b:a+['-']+b,preprocressing_n_tokenizer)
-            return(self._word_ngrams(result, self.stopwords))
+            return(self._word_ngrams(result))
             #   return(self._word_ngrams(result, self.stopwords))
 
         return(analyser)
