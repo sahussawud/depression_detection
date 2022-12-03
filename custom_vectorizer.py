@@ -21,7 +21,7 @@ import functools
 class CustomVectorizer(CountVectorizer): 
     
     # overwrite the build_analyzer method, and word_ngrams count
-    stopwords = list(thai_stopwords())
+    # stopwords = list(thai_stopwords())
 
     def _word_ngrams(self, tokens, stop_words=None):
             """Turn tokens into a sequence of n-grams after stop words filtering"""
@@ -61,11 +61,13 @@ class CustomVectorizer(CountVectorizer):
         # create the analyzer that will be returned by this method
         def analyser(doc):
               
-              # apply the preprocessing and tokenzation steps
-              preprocressing_n_tokenizer = doc.split('-')
-              preprocressing_n_tokenizer = [i.split(',') for i in preprocressing_n_tokenizer]
-              result = functools.reduce(lambda a,b:a+['-']+b,preprocressing_n_tokenizer)
-              return(self._word_ngrams(result, self.stopwords))
+            # apply the preprocessing and tokenzation steps
+            preprocressing_n_tokenizer = doc.split('-')
+            preprocressing_n_tokenizer = [i.split(',') for i in preprocressing_n_tokenizer]
+            result = functools.reduce(lambda a,b:a+['-']+b,preprocressing_n_tokenizer)
+            return(self._word_ngrams(result, self.stopwords))
+            #   return(self._word_ngrams(result, self.stopwords))
+
         return(analyser)
 
 def _document_frequency(X):

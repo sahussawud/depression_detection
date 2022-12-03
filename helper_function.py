@@ -1,4 +1,3 @@
-from pythainlp.corpus.common import thai_stopwords
 from pythainlp.tokenize import word_tokenize
 import string
 import matplotlib.pyplot as plt
@@ -13,6 +12,15 @@ from pythainlp.ulmfit import process_thai
 from pythainlp.tag import pos_tag
 from collections import Counter
 import emoji
+
+import re
+from pythainlp.tokenize import Tokenizer
+from pythainlp.ulmfit import process_thai
+from pythainlp.tag import pos_tag
+from pythainlp.tokenize import word_tokenize
+
+import deepcut
+
 emoji_regx = emoji.EMOJI_DATA.keys()
 
 def top_tfidf_feats(row, features, top_n=25):
@@ -94,15 +102,9 @@ def change_matplotlib_font(font_download_url):
 def dummy_fun(doc):
     return doc
 
-
-import re
-from pythainlp.tokenize import Tokenizer
-from pythainlp.ulmfit import process_thai
-from pythainlp.tag import pos_tag
-from pythainlp.tokenize import word_tokenize
-
-def customize_text_tokenizer(reviewText, engine='attacut', split=False):
-    _tokenizer = Tokenizer(engine='attacut')
+def customize_text_tokenizer(reviewText, engine='deepcut', split=False):
+    '''Preprocessing function'''
+    _tokenizer = Tokenizer(engine='deepcut')
     without_url = re.sub(r"http\S+", "", reviewText)
     # Thai & English Charecter preserve 
     pattern = re.compile(r"[^\u0E00-\u0E7Fa-zA-Z5']|^'|'$|''|[//t//n//s]|^#")
@@ -153,3 +155,4 @@ def extract_handcraft_feature(merge_chat_df):
     merge_chat_df['hour_in_datetime'] = merge_chat_df['hour_in_datetime'].apply(lambda x: np.mean(x))
     merge_chat_df = pd.concat([merge_chat_df, postag_df], axis=1)
     return merge_chat_df
+
