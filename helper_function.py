@@ -19,7 +19,7 @@ from pythainlp.ulmfit import process_thai
 from pythainlp.tag import pos_tag
 from pythainlp.tokenize import word_tokenize
 
-import deepcut
+# import deepcut
 
 emoji_regx = emoji.EMOJI_DATA.keys()
 
