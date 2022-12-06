@@ -12,7 +12,6 @@ from sklearn.pipeline import Pipeline
 import scipy.sparse as sp
 from sklearn.utils.validation import check_is_fitted, check_array, FLOAT_DTYPES, check_scalar
 from sklearn.utils import _IS_32BIT
-from sklearn.utils.fixes import _astype_copy_false
 import numpy as np
 #import for reduce()
 import functools
@@ -102,7 +101,7 @@ class CustomTfidfTranformer(TfidfTransformer):
     if self.use_idf:
       n_samples, n_features = X.shape
       df = _document_frequency(X)
-      df = df.astype(dtype, ** _astype_copy_false(df))
+      df = df.astype(dtype, copy=False)
       # perform idf smoothing if required
       df += int(self.smooth_idf)
       n_samples += int(self.smooth_idf)

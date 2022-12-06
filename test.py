@@ -12,5 +12,4 @@ def main():
     tffidf = CustomTfidForTokenizedfVectorizer(ngram_range=(1,2), use_idf=True)
 
 
-
 main()
