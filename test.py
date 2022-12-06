@@ -1,4 +1,4 @@
-from custom_vectorizer import CustomTfidForTokenizedfVectorizer
+from custom_vectorizer import CustomTfidForTokenizedfVectorizer, CustomVectorizer
 import pandas as pd
 
 def main():
@@ -10,10 +10,6 @@ def main():
     depression_chat_df.columns = ["customer_id","message","timestamp"]
     depression_questionaire_df['condition'] = depression_questionaire_df['condition'].replace(['{{de_high}}', '{{de_serious}}'], ['{{de_serious}}', '{{de_high}}'])
     tffidf = CustomTfidForTokenizedfVectorizer(ngram_range=(1,2), use_idf=True)
-
-
-
-    
 
 
 
