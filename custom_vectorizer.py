@@ -65,7 +65,7 @@ class CustomVectorizer(CountVectorizer):
             preprocressing_n_tokenizer = [i.split(',') for i in preprocressing_n_tokenizer]
             result = functools.reduce(lambda a,b:a+['-']+b,preprocressing_n_tokenizer)
             # return(self._word_ngrams(result))
-            return(self._word_ngrams(result, self.stopwords))
+            return(self._word_ngrams(result, self.stop_words))
 
         return(analyser)
 
@@ -216,7 +216,7 @@ class CustomTfidfVectorizer(TfidfVectorizer):
             # print('preprocressing_n_tokenizer ', preprocressing_n_tokenizer)
             # use CountVectorizer's _word_ngrams built in method
             # to remove stop words and extract n-grams
-            return(self._word_ngrams(preprocressing_n_tokenizer, self.stopwords))
+            return(self._word_ngrams(preprocressing_n_tokenizer, self.stop_words))
         return(analyser)
 
 class CustomTfidForTokenizedfVectorizer(CustomTfidfVectorizer):
@@ -239,7 +239,7 @@ class CustomTfidForTokenizedfVectorizer(CustomTfidfVectorizer):
               # print('preprocressing_n_tokenizer ', preprocressing_n_tokenizer)
               # use CountVectorizer's _word_ngrams built in method
               # to remove stop words and extract n-grams
-              return(self._word_ngrams(result, self.stopwords))
+              return(self._word_ngrams(result, self.stop_words))
           return(analyser)
 
 class CustomTokenizedVectorizerForOriginalTfidf(TfidfVectorizer): 
@@ -349,5 +349,5 @@ class CustomTokenizedVectorizerForOriginalTfidf(TfidfVectorizer):
               # print('preprocressing_n_tokenizer ', preprocressing_n_tokenizer)
               # use CountVectorizer's _word_ngrams built in method
               # to remove stop words and extract n-grams
-              return(self._word_ngrams(result, self.stopwords))
+              return(self._word_ngrams(result, self.stop_words))
         return(analyser)
